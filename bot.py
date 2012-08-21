@@ -67,13 +67,13 @@ class Xbot(SimpleBot):
     def log_event(self, e, event_type):
         ''' Log bot events. '''
         event_types = {
-                'join':       'Joined %s'            % self.channel,
-                'connect':    'Connected to %s'      % self.server,
-                'disconnect': 'Disconnected from %s' % self.server
+                'join':       'Joined %s as'            % self.channel,
+                'connect':    'Connected to %s as'      % self.server,
+                'disconnect': 'Disconnected from %s as' % self.server
         }
 
         if event_type in event_types:
-            print "%s: %s at %s" % (
+            print "%s: %s %s" % (
                     datetime.now().strftime(self.logformat),
                     event_types[event_type],
                     self.nick
@@ -97,7 +97,7 @@ class Xbot(SimpleBot):
     def is_command(self, cmd):
         ''' Check if a command is real. '''
         cmd = split_args(cmd)[0] if isinstance(cmd, tuple) else cmd
-        return cmd.startswith('!') and check_command(cmd)
+        return cmd.startswith('!') and self.check_command(cmd)
 
     def check_command(self, cmd):
         ''' Check if a command exists in the commands dict. '''
@@ -156,7 +156,7 @@ def parse_config(rc='.botrc'):
     header = 'connection'
     settings = dict(zip(
         options,
-        [config.get(header, option).strip("'") for option in options]
+        [config.get(header, option) for option in options]
     ))
     settings['port'] = int(settings['port'])
     return settings

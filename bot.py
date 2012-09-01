@@ -151,6 +151,7 @@ class Xbot(SimpleBot):
         self.log_response(e, 'echo', args)
 
     def userlist(self, c, e, args, source):
+        ''' !userlist. Echoes a list of all users in the channel. '''
         chobj = self.channels[u'%s' % self.channel]
         users = chobj.users()
         userlist = ' '.join(users)

@@ -101,13 +101,11 @@ class Xbot(SimpleBot):
     ################### 
 
     def is_command(self, cmd):
-        ''' Check if a command is real. '''
-        cmd = split_args(cmd)[0] if isinstance(cmd, tuple) else cmd
-        return cmd.startswith('!') and self.check_command(cmd)
-
-    def check_command(self, cmd):
-        ''' Check if a command exists in the commands dict. '''
-        return cmd.lstrip('!') in self.commands.keys()
+        cmd, args = self.split_args(cmd)
+        if cmd.strip('!') in self.commands.keys():
+            return cmd.strip('!'), args
+        else:
+            return False
 
     def split_args(self, cmd):
         ''' Splits a command from the arguments. Returns (cmd, args)'''
@@ -123,9 +121,9 @@ class Xbot(SimpleBot):
         ''' Execute a command after passing a check. '''
         nick = e.source().nick
         c = self.connection
-        command, args = self.split_args(cmd)
-        if self.is_command(command) and self.check_command(command):
-            self.dispatch(command[1:], c, e, args, source)
+        if self.is_command(cmd) is not False:
+            cmd, args = self.is_command(cmd)
+            self.dispatch(cmd, c, e, args, source)
         else:
             pass
 

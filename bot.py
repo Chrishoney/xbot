@@ -3,6 +3,7 @@ import ConfigParser
 from datetime import datetime
 
 from irc.bot import SingleServerIRCBot as SimpleBot
+from irc.bot import Channel 
 
 DEBUG=True
 
@@ -18,7 +19,8 @@ class Xbot(SimpleBot):
         self.timeformat = '%A, %B %d %I:%M %p'
         self.commands = dict((
             ('time', self.time), 
-            ('echo', self.echo)
+            ('echo', self.echo),
+            ('userlist', self.userlist)
         ))
         
 
@@ -43,6 +45,7 @@ class Xbot(SimpleBot):
             self.do_command(c, e, e.arguments()[0], source=self.channel)
             if DEBUG:
                 print e.arguments()[0]
+                print e.source()
 
     def on_privmsg(self, c, e):
         ''' Execute the command if it is valid and respond to the user. '''
@@ -147,6 +150,14 @@ class Xbot(SimpleBot):
         c.privmsg(source, args)
         self.log_response(e, 'echo', args)
 
+    def userlist(self, c, e, args, source):
+        chobj = self.channels[u'%s' % self.channel]
+        users = chobj.users()
+        userlist = ' '.join(users)
+        c.privmsg(source, userlist)
+        
+    #def info(self, c, e, args, source):
+        #addr = e.source().
 
 #################
 # Configuration #

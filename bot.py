@@ -4,6 +4,8 @@ from datetime import datetime
 
 from irc.bot import SingleServerIRCBot as SimpleBot
 
+DEBUG=True
+
 class Xbot(SimpleBot):
 
     def __init__(self, channel, nick, server, port):
@@ -39,12 +41,16 @@ class Xbot(SimpleBot):
         if self.is_command(e.arguments()[0]):
             self.log_msg(e)
             self.do_command(c, e, e.arguments()[0], source=self.channel)
+            if DEBUG:
+                print e.arguments()[0]
 
     def on_privmsg(self, c, e):
         ''' Execute the command if it is valid and respond to the user. '''
         if self.is_command(e.arguments()[0]):
             self.log_msg(e)
             self.do_command(c, e, e.arguments()[0], source=e.source().nick)
+            if DEBUG:
+                print e.arguments()[0]
 
     def on_quit(self, c, e):
         ''' Log the quit event. Doesn't work. ''' 

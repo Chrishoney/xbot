@@ -105,7 +105,7 @@ class Xbot(SimpleBot):
 
     def is_command(self, cmd):
         cmd, args = self.split_args(cmd)
-        if cmd.strip('!') in self.commands.keys():
+        if cmd.strip('!') in self.commands.keys() and cmd[0] == '!':
             return cmd.strip('!'), args
         else:
             return False
